@@ -1,39 +1,54 @@
 package com.example.studentapp.controller;
 
+import com.example.studentapp.model.Course;
 import com.example.studentapp.model.Student;
-import com.example.studentapp.service.StudentService;
+import com.example.studentapp.repository.CourseRepository;
+import com.example.studentapp.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/students")
 public class StudentController {
 
-    private final StudentService studentService;
+    @Autowired
+    private StudentRepository studentRepository;
 
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
+    @Autowired
+    private CourseRepository courseRepository;
 
+    // Tüm öğrencileri listele
     @GetMapping
     public String listStudents(Model model) {
-        model.addAttribute("students", studentService.getAllStudents());
+        model.addAttribute("students", studentRepository.findAll());
         return "student-list";
     }
 
+    // Yeni öğrenci formu
     @GetMapping("/add")
-    public String showForm(Model model) {
+    public String showAddForm(Model model) {
         model.addAttribute("student", new Student());
+        model.addAttribute("allCourses", courseRepository.findAll()); // HTML'de th:each="kurs : ${allCourses}"
         return "student-form";
     }
 
-    @PostMapping("/saveStudent")
-    public String saveStudent(@ModelAttribute Student student) {
-        studentService.saveStudent(student);
+    // Öğrenci kaydetme
+    @PostMapping("/save")
+    public String saveStudent(@ModelAttribute("student") Student student,
+                              @RequestParam(required = false, name = "courses") List<Long> courseIds) {
+
+        if (courseIds != null && !courseIds.isEmpty()) {
+            Set<Course> selectedCourses = new HashSet<>(courseRepository.findAllById(courseIds));
+            student.setCourses(selectedCourses);
+        }
+
+        studentRepository.save(student);
         return "redirect:/students";
     }
 }

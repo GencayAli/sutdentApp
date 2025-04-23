@@ -18,6 +18,13 @@ public class Student {
     private String email;
     private LocalDate geburtsdatum;
 
+
+
+    private String password;
+
+
+
+
     @ManyToMany
     @JoinTable(
             name = "student_course",
@@ -83,5 +90,12 @@ public class Student {
 
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
+    }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -30,13 +30,16 @@ class StudentappApplicationTests {
 		WebElement nachnameField = driver.findElement(By.id("nachname"));
 		WebElement emailField = driver.findElement(By.id("email"));
 		WebElement geburtsdatumField = driver.findElement(By.id("geburtsdatum"));
+		WebElement passwordField = driver.findElement(By.id("password"));
+
 
 		Thread.sleep(1000);
 
-		vornameField.sendKeys("Ahmettt");
+		vornameField.sendKeys("Tom");
 		nachnameField.sendKeys("Yılmazz");
-		emailField.sendKeys("ali@example.com");
+		emailField.sendKeys("atom@example.com");
 		geburtsdatumField.sendKeys("2000-01-01");
+		passwordField.sendKeys("12345");
 
 		WebElement saveButton = driver.findElement(By.cssSelector("button[type='submit']"));
 		saveButton.click();
