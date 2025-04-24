@@ -53,15 +53,28 @@ public class StudentController {
     }
 
     @GetMapping("/edit/{id}")
-    public  String studentUpdate(@PathVariable Long id, Model model){
-        Student students = studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ungültige ID: " + id) );
-        model.addAttribute("student", students);
-        model.addAttribute("courses", courseRepository.findAll());
+    public String studentUpdate(@PathVariable Long id, Model model) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ungültige ID: " + id));
 
-        return "student-form";
+        model.addAttribute("student", student); // Form için güncellenecek öğrenci
+        model.addAttribute("students", studentRepository.findAll()); // Liste için
+        model.addAttribute("courses", courseRepository.findAll()); // Kurslar
+
+        return "student-manage"; // ✅ her şey tek sayfada
     }
+
     @GetMapping("/delete/{id}") public String loscheStudent(@PathVariable Long id) {
         studentRepository.deleteById(id);
         return "redirect:/students";
     }
+
+    @GetMapping("/manage")
+    public String manageStudents(Model model) {
+        model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("student", new Student()); // form için boş nesne
+        model.addAttribute("courses", courseRepository.findAll());
+        return "student-manage"; // oluşturacağın birleşik sayfa
+    }
+
 }

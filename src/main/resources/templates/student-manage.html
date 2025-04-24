@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Studenten verwalten</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+<h2 th:text="${student.id != null} ? 'Student aktualisieren' : 'Neuen Studenten hinzufügen'"></h2>
+
+<form th:action="@{/students/save}" th:object="${student}" method="post" class="row g-3">
+    <input type="hidden" th:field="*{id}" />
+
+    <div class="col-md-6">
+        <label for="vorname" class="form-label">Vorname</label>
+        <input type="text" th:field="*{vorname}" class="form-control" id="vorname" required>
+    </div>
+
+    <div class="col-md-6">
+        <label for="nachname" class="form-label">Nachname</label>
+        <input type="text" th:field="*{nachname}" class="form-control" id="nachname" required>
+    </div>
+
+    <div class="col-md-6">
+        <label for="email" class="form-label">E-Mail</label>
+        <input type="email" th:field="*{email}" class="form-control" id="email" required>
+    </div>
+
+    <div class="col-md-6">
+        <label for="geburtsdatum" class="form-label">Geburtsdatum</label>
+        <input type="date" th:field="*{geburtsdatum}" class="form-control" id="geburtsdatum" required>
+    </div>
+
+    <div class="col-12">
+        <label for="courses" class="form-label">Kurse</label>
+        <select th:field="*{courses}" multiple class="form-select" id="courses">
+            <option th:each="kurs : ${courses}" th:value="${kurs.id}" th:text="${kurs.name}"></option>
+        </select>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Speichern</button>
+        <a href="/" class="btn btn-secondary">Zurück zur Startseite</a>
+    </div>
+</form>
+
+<hr class="my-5">
+
+<h2>Studentenliste</h2>
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>E-Mail</th>
+        <th>Geburtsdatum</th>
+        <th>Kurse</th>
+        <th>Aktion</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="stud : ${students}">
+        <td th:text="${stud.id}"></td>
+        <td th:text="${stud.vorname}"></td>
+        <td th:text="${stud.nachname}"></td>
+        <td th:text="${stud.email}"></td>
+        <td th:text="${stud.geburtsdatum}"></td>
+        <td>
+            <span th:each="kurs : ${stud.courses}" th:text="${kurs.name + ' '}" />
+        </td>
+        <td>
+            <a th:href="@{'/students/edit/' + ${stud.id}}" class="btn btn-sm btn-warning">Bearbeiten</a>
+            <a th:href="@{'/students/delete/' + ${stud.id}}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirm('Möchten Sie diesen Studenten wirklich löschen?')">
+                Löschen
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
