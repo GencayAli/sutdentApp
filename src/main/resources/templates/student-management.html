@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Studenten verwalten</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+</head>
+<body class="container-fluid mt-4">
+
+<!-- Sayfa başlığı -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>🎓 Studentenverwaltung</h1>
+  <a href="/" class="btn btn-outline-secondary">Zurück zur Startseite</a>
+</div>
+
+<!-- Form başlığı -->
+<h4 th:text="${student.id != null} ? 'Student aktualisieren' : 'Neuen Studenten hinzufügen'"></h4>
+
+<!-- Form -->
+<form th:action="@{/students/save}" th:object="${student}" method="post" class="row g-3">
+  <input type="hidden" th:field="*{id}" />
+
+  <div class="col-md-6">
+    <label for="vorname" class="form-label">Vorname</label>
+    <input type="text" th:field="*{vorname}" class="form-control" id="vorname" required>
+  </div>
+
+  <div class="col-md-6">
+    <label for="nachname" class="form-label">Nachname</label>
+    <input type="text" th:field="*{nachname}" class="form-control" id="nachname" required>
+  </div>
+
+  <div class="col-md-6">
+    <label for="email" class="form-label">E-Mail</label>
+    <input type="email" th:field="*{email}" class="form-control" id="email" required>
+  </div>
+
+  <div class="col-md-6">
+    <label for="geburtsdatum" class="form-label">Geburtsdatum</label>
+    <input type="date" th:field="*{geburtsdatum}" class="form-control" id="geburtsdatum" required>
+  </div>
+
+  <div class="col-12">
+    <label for="courses" class="form-label">Kurse</label>
+    <select th:field="*{courses}" multiple class="form-select" id="courses">
+      <option th:each="kurs : ${courses}" th:value="${kurs.id}" th:text="${kurs.name}"></option>
+    </select>
+  </div>
+
+  <div th:if="${#lists.isEmpty(courses)}" class="alert alert-warning">
+    Es sind keine Kurse vorhanden. Bitte zuerst Kurse hinzufügen.
+  </div>
+
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Speichern</button>
+  </div>
+</form>
+
+<hr class="my-5">
+
+<!-- Liste başlığı -->
+<h4>Studentenliste (<span th:text="${#lists.size(students)}"></span>)</h4>
+
+<!-- Tablo -->
+<table class="table table-striped table-hover">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Vorname</th>
+    <th>Nachname</th>
+    <th>E-Mail</th>
+    <th>Geburtsdatum</th>
+    <th>Kurse</th>
+    <th>Aktion</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="stud : ${students}">
+    <td th:text="${stud.id}"></td>
+    <td th:text="${stud.vorname}"></td>
+    <td th:text="${stud.nachname}"></td>
+    <td th:text="${stud.email}"></td>
+    <td th:text="${stud.geburtsdatum}"></td>
+    <td>
+      <span th:each="kurs : ${stud.courses}" th:text="${kurs.name + ' '}"></span>
+    </td>
+    <td>
+      <a th:href="@{'/students/edit/' + ${stud.id}}" class="btn btn-warning btn-sm" title="Bearbeiten">
+        <i class="fas fa-pen"></i>
+      </a>
+      <a th:href="@{'/students/delete/' + ${stud.id}}" class="btn btn-danger btn-sm" title="Löschen"
+         onclick="return confirm('Bist du sicher, dass du diesen Studenten löschen möchtest?');">
+        <i class="fas fa-trash"></i>
+      </a>
+    </td>
+
+
+
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

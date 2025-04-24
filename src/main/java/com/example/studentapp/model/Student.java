@@ -15,6 +15,7 @@ public class Student {
 
     private String vorname;
     private String nachname;
+    @Column(unique = true)
     private String email;
     private LocalDate geburtsdatum;
 
