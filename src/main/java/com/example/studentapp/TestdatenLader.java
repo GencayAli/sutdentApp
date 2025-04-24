@@ -18,17 +18,17 @@ public class TestdatenLader {
         return args -> {
             if (courseRepository.count() == 0) {
                 Course kurs1 = new Course();
-                kurs1.setName("Mathematik");
+                kurs1.setName("Mathematikk");
 
             Course kurs2 = new Course();
-            kurs2.setName("Informatik");
+            kurs2.setName("Informatikkk");
 
             // Kurse in die Datenbank speichern
             courseRepository.save(kurs1);
             courseRepository.save(kurs2);
 
             // Beispielstudent erstellen
-            Student student = new Student("Lisa", "Meier", "lisa@example.com", LocalDate.of(2001, 3, 15));
+            Student student = new Student("Lissaa", "Meierr", "lisa@examplee.com", LocalDate.of(2001, 3, 15));
             student.setPassword("1234");
 
             // Kurse dem Studenten zuweisen

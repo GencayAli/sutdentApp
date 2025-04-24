@@ -27,6 +27,10 @@
     <td>
       <a th:href="@{'/kurse/' + ${kurs.id} + '/students'}" class="btn btn-info btn-sm">Studenten ansehen</a>
     </td>
+    <td>
+      <a th:href="@{'/kurse/edit/' + ${kurs.id}}" class="btn btn-warning btn-sm">Bearbeiten</a>
+      <a th:href="@{'/kurse/delete/' + ${kurs.id}}" class="btn btn-danger btn-sm"onclick="return confirm('Möchten Sie diesen Kurs wirklich löschen?')">Löschen</a></td>
+    </td>
   </tr>
   </tbody>
 </table>

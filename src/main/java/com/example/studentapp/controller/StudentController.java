@@ -51,4 +51,17 @@ public class StudentController {
         studentRepository.save(student);
         return "redirect:/students";
     }
+
+    @GetMapping("/edit/{id}")
+    public  String studentUpdate(@PathVariable Long id, Model model){
+        Student students = studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ungültige ID: " + id) );
+        model.addAttribute("student", students);
+        model.addAttribute("courses", courseRepository.findAll());
+
+        return "student-form";
+    }
+    @GetMapping("/delete/{id}") public String loscheStudent(@PathVariable Long id) {
+        studentRepository.deleteById(id);
+        return "redirect:/students";
+    }
 }

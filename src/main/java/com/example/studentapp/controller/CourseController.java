@@ -1,6 +1,7 @@
 package com.example.studentapp.controller;
 
 import com.example.studentapp.model.Course;
+import com.example.studentapp.model.Student;
 import com.example.studentapp.repository.CourseRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,5 +53,18 @@ public class CourseController {
             model.addAttribute("studenten", kurs.getStudents());
         }
         return "kurs-studenten";
+    }
+
+    @GetMapping("/edit/{id}")
+    public  String courseUpdate(@PathVariable Long id, Model model){
+        Course course = courseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ungültige ID: " + id) );
+        model.addAttribute("kurs", course);
+
+        return "kurs-formular";
+    }
+    @GetMapping("/delete/{id}")
+    public String löscheKurse(@PathVariable Long id) {
+        courseRepository.deleteById(id);
+        return "redirect:/kurse";
     }
 }

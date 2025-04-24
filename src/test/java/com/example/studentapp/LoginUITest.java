@@ -31,9 +31,9 @@ public class LoginUITest {
         WebElement emailField = driver.findElement(By.id("email"));
         WebElement passwordField = driver.findElement(By.id("password"));
 
-        // TestdatenLader sınıfında "admin" maili ve "12345" şifresiyle bir kullanıcı oluşturmuştuk
-        emailField.sendKeys("admin@gmail.com");
-        passwordField.sendKeys("12345");
+        // TestdatenLader sınıfında "admin" maili ve "1234" şifresiyle bir kullanıcı oluşturmuştuk
+        emailField.sendKeys("lisa@example.com");
+        passwordField.sendKeys("1234");
 
         WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
         loginButton.click();
