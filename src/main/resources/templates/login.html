@@ -12,8 +12,9 @@
         <h3 class="text-center mb-4">🎓 Login</h3>
         <form th:action="@{/login}" method="post">
             <div class="mb-3">
-                <label for="email" class="form-label">E-Mail</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="E-Mail" required>
+                <label for="username" class="form-label">E-Mail</label>
+                <input type="email" class="form-control" id="username" name="username" placeholder="E-Mail" required>
+
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Passwort</label>
@@ -22,8 +23,13 @@
             <div th:if="${loginError}" class="alert alert-danger" th:text="${loginError}"></div>
             <button type="submit" class="btn btn-primary w-100">Anmelden</button>
         </form>
+
     </div>
 </div>
+<footer class="text-center text-muted mt-5 mb-3">
+    &copy; 2025 StudentApp Projekt
+</footer>
 
 </body>
+
 </html>

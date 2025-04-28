@@ -4,11 +4,14 @@ import com.example.studentapp.model.Course;
 import com.example.studentapp.model.Student;
 import com.example.studentapp.repository.CourseRepository;
 import com.example.studentapp.repository.StudentRepository;
+import com.example.studentapp.service.StudentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.HashSet;
@@ -18,6 +21,12 @@ import java.util.Set;
 @Controller
 @RequestMapping("/students")
 public class StudentController {
+
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -87,6 +96,28 @@ public class StudentController {
         // öğrenci bilgilerini ekle
         return "profil"; // templates/profil.html
     }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(@ModelAttribute Student student,
+                                @RequestParam(required = false) String newPassword,
+                                RedirectAttributes redirectAttributes) {
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            student.setPassword(passwordEncoder.encode(newPassword));
+        } else {
+            Student existing = studentService.findById(student.getId()).orElse(null);
+            if (existing != null) {
+                student.setPassword(existing.getPassword());
+            }
+        }
+
+        studentService.save(student);
+
+        redirectAttributes.addFlashAttribute("success", "Profil wurde erfolgreich aktualisiert!");
+
+        return "redirect:/profile";
+    }
+
 
 
 }

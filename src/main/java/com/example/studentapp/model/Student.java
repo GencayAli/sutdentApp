@@ -22,7 +22,7 @@ public class Student {
 
 
     private String password;
-
+    private String rolle;
 
 
 
@@ -99,4 +99,13 @@ public class Student {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getRolle() {
+        return rolle;
+    }
+
+    public void setRolle(String rolle) {
+        this.rolle = rolle;
+    }
+
 }

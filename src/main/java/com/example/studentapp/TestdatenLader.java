@@ -7,36 +7,42 @@ import com.example.studentapp.repository.StudentRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Set;
 
 @Configuration
 public class TestdatenLader {
+
     @Bean
-    public CommandLineRunner initTestDaten(StudentRepository studentRepository, CourseRepository courseRepository) {
+    public CommandLineRunner initTestDaten(StudentRepository studentRepository, CourseRepository courseRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             if (courseRepository.count() == 0) {
                 Course kurs1 = new Course();
-                kurs1.setName("Mathematikk");
+                kurs1.setName("Mathematik");
 
-            Course kurs2 = new Course();
-            kurs2.setName("Informatikkk");
+                Course kurs2 = new Course();
+                kurs2.setName("Informatik");
 
-            // Kurse in die Datenbank speichern
-            courseRepository.save(kurs1);
-            courseRepository.save(kurs2);
+                courseRepository.save(kurs1);
+                courseRepository.save(kurs2);
+            }
 
-            // Beispielstudent erstellen
-            Student student = new Student("Lissaa", "Meierr", "lisa@examplee.com", LocalDate.of(2001, 3, 15));
-            student.setPassword("1234");
+            if (studentRepository.count() == 0) {
+                // Student
+                Student student = new Student("Lis", "Meierr", "lisa@examplee.com", LocalDate.of(2001, 3, 15));
+                student.setPassword(passwordEncoder.encode("1234"));
+                student.setRolle("STUDENT");
+                student.setCourses(Set.of(courseRepository.findAll().get(0), courseRepository.findAll().get(1)));
+                studentRepository.save(student);
 
-            // Kurse dem Studenten zuweisen
-            student.setCourses(Set.of(kurs1, kurs2));
-
-            // Student in die Datenbank speichern
-            studentRepository.save(student);
-        }
-    };
-}
+                // Admin
+                Student admin = new Student("Admin", "User", "admin@example.com", LocalDate.of(1990, 1, 1));
+                admin.setPassword(passwordEncoder.encode("admin123"));
+                admin.setRolle("ADMIN");
+                studentRepository.save(admin);
+            }
+        };
+    }
 }
